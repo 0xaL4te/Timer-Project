@@ -10,11 +10,15 @@ import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,12 +30,23 @@ public class MainActivity extends AppCompatActivity {
     private boolean isPaused = false;
     private long remainingTimeInMillis;
     private MediaPlayer mediaPlayer;
+    private Button soundSettingsButton;
+    private Button historyButton;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        historyButton = findViewById(R.id.historyButton);
+        historyButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, TimerHistoryActivity.class);
+            startActivity(intent);
+        });
+
+        TimerDatabaseHelper dbHelper = new TimerDatabaseHelper(this);
 
         timerDisplay = findViewById(R.id.timerDisplay);
         hourInput = findViewById(R.id.hourInput);
@@ -41,8 +56,7 @@ public class MainActivity extends AppCompatActivity {
         pauseButton = findViewById(R.id.pauseButton);
         resetButton = findViewById(R.id.resetButton);
 
-        // Initialize sound for alarm
-        mediaPlayer = MediaPlayer.create(this, R.raw.alarm_sound);
+        mediaPlayer = MediaPlayer.create(this, R.raw.iphone_alarm);
 
         // Initialize Notification Channel
         createNotificationChannel();
@@ -50,6 +64,12 @@ public class MainActivity extends AppCompatActivity {
         startButton.setOnClickListener(v -> startTimer());
         pauseButton.setOnClickListener(v -> pauseTimer());
         resetButton.setOnClickListener(v -> resetTimer());
+        soundSettingsButton = findViewById(R.id.soundSettingsButton);
+        soundSettingsButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SoundSettingsActivity.class);
+            startActivity(intent);
+        });
+
     }
 
     private void startTimer() {
@@ -91,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void pauseTimer() {
         if (countDownTimer != null) {
             countDownTimer.cancel();
@@ -112,14 +133,21 @@ public class MainActivity extends AppCompatActivity {
     private void endTimer() {
         timerDisplay.setText("00:00:00");
 
-        // Play sound
+        // Play a sound notification
         mediaPlayer.start();
 
-        // Display notification
-        showNotification();
-
-        // Display "Time's Up!!" message on screen
+        // Display "Time's Up!!" message on the screen
         timerDisplay.setText("Time's Up!!");
+
+        // Save the timer history to the database
+        String duration = "Your Duration Logic"; // Replace with actual duration logic
+        String endTime = DateFormat.getDateTimeInstance().format(new Date());
+
+        // Debugging: Log the values to check if they are correct
+        Log.d("TimerHistory", "Saving timer history: Duration = " + duration + ", End Time = " + endTime);
+
+        TimerDatabaseHelper dbHelper = null;
+        dbHelper.addTimerHistory(duration, endTime);
     }
 
     private int getIntFromEditText(EditText editText) {
@@ -149,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
 
     private void showNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "timerEnd")
