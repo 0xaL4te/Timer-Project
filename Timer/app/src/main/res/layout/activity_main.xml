@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="#FFFFFF">
+
+    <!-- Large Countdown Display -->
+    <TextView
+        android:id="@+id/timerDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:text="00:00:00"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+
+    <!-- Hour Input -->
+    <EditText
+        android:id="@+id/hourInput"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:hint="HH"
+        android:inputType="number"
+        android:maxLength="2"
+        android:layout_below="@id/timerDisplay"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="10dp"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Minute Input -->
+    <EditText
+        android:id="@+id/minuteInput"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:hint="MM"
+        android:inputType="number"
+        android:maxLength="2"
+        android:layout_toRightOf="@id/hourInput"
+        android:layout_alignBaseline="@id/hourInput"
+        android:layout_marginEnd="10dp" />
+
+    <!-- Second Input -->
+    <EditText
+        android:id="@+id/secondInput"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:hint="SS"
+        android:inputType="number"
+        android:maxLength="2"
+        android:layout_toRightOf="@id/minuteInput"
+        android:layout_alignBaseline="@id/minuteInput" />
+
+    <!-- Start Button -->
+    <Button
+        android:id="@+id/startButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Timer"
+        android:layout_below="@id/hourInput"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <!-- Pause Button -->
+    <Button
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pause Timer"
+        android:layout_below="@id/startButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+
+    <!-- Reset Button -->
+    <Button
+        android:id="@+id/resetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset Timer"
+        android:layout_below="@id/pauseButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp" />
+</RelativeLayout>
